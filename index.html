@@ -1,44 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rankwise India - Rank Predictor</title>
+<meta charset="UTF-8">
+<title>Rankwise India Pro</title>
 <style>
 body {
-  font-family: Arial, sans-serif;
-  background: #0d47a1;
+  font-family: Arial;
+  margin: 0;
+  padding: 0;
+  background: #111;
   color: white;
   text-align: center;
-  margin: 0;
-  padding: 20px;
 }
-h1 {
-  margin-bottom: 20px;
+header {
+  background: #1f1f1f;
+  padding: 15px;
+  font-size: 22px;
+}
+.container {
+  padding: 20px;
 }
 .box {
-  background: white;
-  color: black;
+  background: #222;
   padding: 20px;
-  margin: auto;
-  max-width: 350px;
   border-radius: 10px;
+  max-width: 500px;
+  margin: auto;
 }
-input {
-  width: 90%;
-  padding: 12px;
-  margin: 7px 0;
-  border: 1px solid gray;
-  border-radius: 7px;
+input, select {
+  width: 95%;
+  padding: 8px;
+  margin: 8px 0;
 }
 button {
-  width: 90%;
-  padding: 12px;
-  margin-top: 10px;
-  background: #0d47a1;
-  color: white;
+  padding: 10px 20px;
+  background: #00c853;
+  color: black;
   border: none;
-  border-radius: 7px;
-  font-size: 16px;
+  cursor: pointer;
 }
 .result {
   margin-top: 15px;
@@ -47,29 +46,77 @@ button {
 </style>
 </head>
 <body>
-<h1>Rankwise India<br>Rank Predictor</h1>
+
+<header>Rankwise India Pro</header>
+
+<div class="container">
 <div class="box">
-<input type="number" id="right" placeholder="Right Answers">
+
+<select id="exam">
+<option value="SSC_GD">SSC GD</option>
+<option value="SSC_CGL">SSC CGL</option>
+<option value="IBPS_PO">IBPS PO</option>
+<option value="RRB_GD">RRB Group-D</option>
+</select>
+
+<select id="category">
+<option value="General">General</option>
+<option value="OBC">OBC</option>
+<option value="SC">SC</option>
+<option value="ST">ST</option>
+</select>
+
+<input type="number" id="correct" placeholder="Correct Answers">
 <input type="number" id="wrong" placeholder="Wrong Answers">
-<input type="number" id="totalCandidates" placeholder="Total Candidates">
-<button onclick="calculate()">Estimate Rank</button>
-<div class="result" id="result"></div>
+
+<button onclick="calculate()">Generate Report</button>
+
+<div class="result" id="output"></div>
+
+</div>
 </div>
 
 <script>
 function calculate() {
-  let right = parseFloat(document.getElementById("right").value) || 0;
-  let wrong = parseFloat(document.getElementById("wrong").value) || 0;
-  let total = parseFloat(document.getElementById("totalCandidates").value) || 0;
 
-  let marks = (right * 1) - (wrong * 0.33);
-  let percentile = (marks / 100) * 100;
-  let rank = Math.round(total - (percentile / 100 * total));
+let exam = document.getElementById("exam").value;
+let category = document.getElementById("category").value;
+let correct = parseFloat(document.getElementById("correct").value) || 0;
+let wrong = parseFloat(document.getElementById("wrong").value) || 0;
 
-  document.getElementById("result").innerHTML =
-    "Final Marks: " + marks.toFixed(2) +
-    "<br>Estimated Rank: " + rank;
+let negative = 0.25;
+if(exam.includes("RRB")) negative = 0.33;
+
+let marks = (correct * 1) - (wrong * negative);
+
+let cutoff;
+if(category === "General") cutoff = 120;
+else if(category === "OBC") cutoff = 110;
+else if(category === "SC") cutoff = 95;
+else cutoff = 85;
+
+let status = marks >= cutoff ? "Likely Qualified ✅" : "Below Cutoff ❌";
+
+let percentile = (marks / 200) * 100;
+
+let rank;
+if(marks >= 150) rank = "Under 5,000";
+else if(marks >= 120) rank = "Under 25,000";
+else if(marks >= 100) rank = "Under 60,000";
+else rank = "Above 60,000";
+
+localStorage.setItem("lastScore", marks);
+
+document.getElementById("output").innerHTML =
+"Exam: " + exam +
+"<br>Marks: " + marks.toFixed(2) +
+"<br>Percentile: " + percentile.toFixed(2) + "%" +
+"<br>Category: " + category +
+"<br>Status: " + status +
+"<br>Estimated Rank: " + rank;
+
 }
 </script>
+
 </body>
 </html>
