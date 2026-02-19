@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rankwise India - Rank Predictor</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #0d47a1;
+  color: white;
+  text-align: center;
+  margin: 0;
+  padding: 20px;
+}
+h1 {
+  margin-bottom: 20px;
+}
+.box {
+  background: white;
+  color: black;
+  padding: 20px;
+  margin: auto;
+  max-width: 350px;
+  border-radius: 10px;
+}
+input {
+  width: 90%;
+  padding: 12px;
+  margin: 7px 0;
+  border: 1px solid gray;
+  border-radius: 7px;
+}
+button {
+  width: 90%;
+  padding: 12px;
+  margin-top: 10px;
+  background: #0d47a1;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  font-size: 16px;
+}
+.result {
+  margin-top: 15px;
+  font-weight: bold;
+}
+</style>
+</head>
+<body>
+<h1>Rankwise India<br>Rank Predictor</h1>
+<div class="box">
+<input type="number" id="right" placeholder="Right Answers">
+<input type="number" id="wrong" placeholder="Wrong Answers">
+<input type="number" id="totalCandidates" placeholder="Total Candidates">
+<button onclick="calculate()">Estimate Rank</button>
+<div class="result" id="result"></div>
+</div>
+
+<script>
+function calculate() {
+  let right = parseFloat(document.getElementById("right").value) || 0;
+  let wrong = parseFloat(document.getElementById("wrong").value) || 0;
+  let total = parseFloat(document.getElementById("totalCandidates").value) || 0;
+
+  let marks = (right * 1) - (wrong * 0.33);
+  let percentile = (marks / 100) * 100;
+  let rank = Math.round(total - (percentile / 100 * total));
+
+  document.getElementById("result").innerHTML =
+    "Final Marks: " + marks.toFixed(2) +
+    "<br>Estimated Rank: " + rank;
+}
+</script>
+</body>
+</html>
