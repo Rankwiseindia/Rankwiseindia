@@ -166,3 +166,111 @@ function calculateFromHTML(){
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rankwise India - Rank Predictor</title>
+<meta name="description" content="Rankwise India PRO: SSC, RRB, IBPS Rank Predictor with Graphs and Category Adjustment">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="css/style.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<header class="text-center p-3 bg-dark text-white">
+<h1>Rankwise India PRO</h1>
+<nav>
+<a href="index.html" class="text-white mx-2">Home</a>
+<a href="rank.html" class="text-white mx-2">Rank Predictor</a>
+</nav>
+</header>
+
+<div class="container my-5 p-4 bg-white rounded shadow">
+<label>परीक्षा चुनें</label>
+<select id="exam" class="form-select">
+<option value="SSC GD">SSC GD</option>
+<option value="SSC CGL">SSC CGL</option>
+<option value="RRB GROUP D">RRB GROUP D</option>
+<option value="IBPS PO">IBPS PO</option>
+</select>
+
+<label>अपना स्कोर डालें</label>
+<input type="number" id="score" class="form-control" placeholder="Enter Your Score">
+
+<label>Category</label>
+<select id="category" class="form-select">
+<option value="GEN">General</option>
+<option value="OBC">OBC</option>
+<option value="SC">SC</option>
+<option value="ST">ST</option>
+</select>
+
+<button class="btn btn-primary mt-3 w-100" onclick="predictRank()">Predict Rank</button>
+
+<div id="result" class="mt-3 text-center"></div>
+<canvas id="rankChart" class="mt-4"></canvas>
+</div>
+
+<footer class="text-center p-3 mt-5 text-muted">
+© 2026 Rankwise India | Designed by Yatendra Kumar
+</footer>
+
+<script>
+let chart;
+function predictRank(){
+let score=parseInt(document.getElementById('score').value);
+let category=document.getElementById('category').value;
+let exam=document.getElementById('exam').value;
+
+if(isNaN(score)||score<0){document.getElementById('result').innerText="कृपया सही स्कोर डालें।"; return;}
+
+let baseRank=300000-(score*1200);
+if(exam==="SSC CGL") baseRank=150000-(score*900);
+if(exam==="IBPS PO") baseRank=60000-(score*800);
+if(exam==="RRB GROUP D") baseRank=250000-(score*1000);
+
+let adjustment=0;
+if(category==="OBC") adjustment=-5000;
+if(category==="SC") adjustment=-10000;
+if(category==="ST") adjustment=-15000;
+
+let rank=baseRank+adjustment;
+if(rank<1) rank=1;
+
+document.getElementById('result').innerHTML=`<h4>आपकी अनुमानित रैंक: <span style="color:#2c3e50;">${rank.toLocaleString()}+</span></h4>`;
+
+// Chart
+let scores=[score-5,score-3,score-1,score,score+1,score+3,score+5];
+let ranks=scores.map(s=>{
+let r=300000-(s*1200);
+if(exam==="SSC CGL") r=150000-(s*900);
+if(exam==="IBPS PO") r=60000-(s*800);
+if(exam==="RRB GROUP D") r=250000-(s*1000);
+if(category==="OBC") r+=-5000;
+if(category==="SC") r+=-10000;
+if(category==="ST") r+=-15000;
+if(r<1) r=1;
+return r;
+});
+
+if(chart) chart.destroy();
+let ctx=document.getElementById('rankChart').getContext('2d');
+chart=new Chart(ctx,{
+type:'line',
+data:{
+labels:scores.map(x=>x),
+datasets:[{label:'Estimated Rank', data:ranks, borderColor:'#2c3e50', backgroundColor:'rgba(44,62,80,0.2)', fill:true, tension:0.4}]
+},
+options:{
+responsive:true,
+plugins:{legend:{display:true, position:'top'}},
+scales:{y:{beginAtZero:false, reverse:true}}
+}
+});
+}
+</script>
+
+</body>
+</html>
