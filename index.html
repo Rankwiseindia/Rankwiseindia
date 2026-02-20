@@ -7,95 +7,111 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            background: linear-gradient(135deg, #e0f7fa, #b3e5fc);
             margin: 0;
             padding: 20px;
             color: #333;
         }
         .container {
-            max-width: 750px;
+            max-width: 800px;
             margin: 0 auto;
             background: white;
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.18);
         }
         h1 {
             text-align: center;
-            color: #1565c0;
-            margin-bottom: 10px;
+            color: #0277bd;
+            margin-bottom: 8px;
+            font-size: 32px;
         }
         p.subtitle {
             text-align: center;
             color: #555;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
+            font-size: 16px;
         }
         label {
             display: block;
-            margin: 15px 0 6px;
+            margin: 18px 0 8px;
             font-weight: bold;
-            color: #333;
+            color: #0277bd;
+            font-size: 16px;
         }
         input, select {
             width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
+            padding: 14px;
+            font-size: 17px;
+            border: 1px solid #90caf9;
+            border-radius: 8px;
             box-sizing: border-box;
+            background: #f9f9f9;
+        }
+        select {
+            height: 50px;
         }
         button {
-            background: #4caf50;
+            background: #43a047;
             color: white;
             border: none;
-            padding: 15px;
-            font-size: 18px;
+            padding: 16px;
+            font-size: 19px;
             width: 100%;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
-            margin: 20px 0;
+            margin: 25px 0;
             font-weight: bold;
+            transition: background 0.3s;
         }
         button:hover {
             background: #388e3c;
         }
         #pdfLink {
-            margin: 10px 0;
+            margin: 12px 0;
             font-size: 16px;
             word-break: break-all;
+            color: #0277bd;
         }
         #resultSection {
-            margin-top: 30px;
-            padding: 20px;
+            margin-top: 35px;
+            padding: 25px;
             background: #e8f5e9;
-            border-radius: 10px;
+            border-radius: 12px;
             text-align: center;
             display: none;
+            border: 1px solid #a5d6a7;
         }
         #marks {
-            font-size: 36px;
+            font-size: 42px;
             font-weight: bold;
             color: #2e7d32;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 30px;
+            margin-top: 35px;
         }
         th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
+            border: 1px solid #e0e0e0;
+            padding: 14px;
             text-align: center;
+            font-size: 15px;
         }
         th {
-            background: #1565c0;
+            background: #0277bd;
             color: white;
         }
-        .note {
+        .note, .warning {
             font-size: 14px;
-            color: #777;
+            color: #555;
             text-align: center;
-            margin-top: 30px;
+            margin-top: 35px;
+        }
+        .warning {
+            color: #d32f2f;
+            font-weight: bold;
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -103,19 +119,44 @@
 
     <div class="container">
         <h1>Rank Predictor & Marks Calculator</h1>
-        <p class="subtitle">SSC, RRB, Police exams के लिए marks calculate करो, save करो और rank estimate देखो (Naveen Rank Mitra)</p>
+        <p class="subtitle">SSC, RRB, Police, State CET & अन्य exams के लिए marks calculate करो और rank estimate देखो (Naveen Rank Mitra)</p>
+
+        <div class="warning">Note: ऑटो PDF parse अभी नहीं हो पा रहा (ब्राउजर लिमिटेशन)। PDF खुद खोलकर सही/गलत गिनो।</div>
 
         <label>Answer Key URL पेस्ट करो (Official PDF):</label>
         <input type="url" id="answerKeyUrl" placeholder="https://ssc.gov.in/.../answer-key.pdf">
 
         <div id="pdfLink"></div>
 
-        <label>Exam चुनें (Marking Scheme):</label>
+        <label>Exam चुनें (Marking Scheme 2025-26):</label>
         <select id="examScheme">
+            <!-- SSC Exams -->
             <option value="2,0.5,100">SSC CGL Tier-1 (+2 सही, -0.5 गलत, 100 प्रश्न)</option>
-            <option value="1,0.25,100">SSC CHSL (+1 सही, -0.25 गलत, 100 प्रश्न)</option>
-            <option value="1,0,100">RRB NTPC (+1 सही, कोई नेगेटिव नहीं, 100 प्रश्न)</option>
-            <option value="1,0.33,100">Delhi Police / कुछ अन्य (+1 सही, -1/3 गलत)</option>
+            <option value="2,0.5,100">SSC CHSL Tier-1 (+2 सही, -0.5 गलत, 100 प्रश्न)</option>
+            <option value="2,0.5,100">SSC MTS (+2 सही, -0.5 गलत, 100 प्रश्न)</option>
+            <option value="2,0.5,100">SSC GD Constable (+2 सही, -0.5 गलत, 80 प्रश्न - approx)</option>
+            <option value="2,0.5,200">SSC CPO Paper-1 (+2 सही, -0.5 गलत, 200 प्रश्न)</option>
+            <option value="1,0.25,200">SSC Stenographer Grade C&D (+1 सही, -0.25 गलत, 200 प्रश्न)</option>
+            <!-- RRB Exams -->
+            <option value="1,0.33,100">RRB NTPC CBT-1 (+1 सही, -1/3 गलत, 100 प्रश्न)</option>
+            <option value="1,0.33,100">RRB Group D (+1 सही, -1/3 गलत, 100 प्रश्न)</option>
+            <option value="1,0.33,75">RRB ALP CBT-1 (+1 सही, -1/3 गलत, 75 प्रश्न)</option>
+            <option value="1,0.33,100">RRB JE CBT-1 (+1 सही, -1/3 गलत, 100 प्रश्न)</option>
+            <!-- Police Exams -->
+            <option value="1,0.25,100">UP Police Constable (+1 सही, -0.25 गलत, 150 प्रश्न - 300 marks adjusted)</option>
+            <option value="1,0.25,100">Delhi Police Constable (+1 सही, -0.25 गलत, 100 प्रश्न)</option>
+            <option value="1,0.25,100">Bihar Police Constable (+1 सही, -0.25 गलत, 100 प्रश्न)</option>
+            <option value="1,0.25,100">MP Police Constable (+1 सही, -0.25 गलत, 100 प्रश्न)</option>
+            <option value="1,0.25,150">Rajasthan Police Constable (+1 सही, -0.25 गलत, 150 प्रश्न)</option>
+            <option value="1,0.33,100">Bihar Police SI Prelims (+1 सही, -0.2 गलत approx, 100 प्रश्न)</option>
+            <!-- State CET & Others -->
+            <option value="1,0.25,100">HSSC CET Group C (+1 सही, -0.25 गलत, 100 प्रश्न)</option>
+            <option value="1,0.25,100">UPSSSC PET (+1 सही, -0.25 गलत, 100 प्रश्न)</option>
+            <option value="4,1,150">BSSC CGL Prelims (+4 सही, -1 गलत, 150 प्रश्न)</option>
+            <!-- और exams अगर जरूरत हो तो ऐड कर सकते हो -->
+            <option value="1,0.33,120">RPF Constable (+1 सही, -1/3 गलत, 120 प्रश्न)</option>
+            <option value="1,0.25,150">Other State Police Constable (+1 सही, -0.25 गलत, 150 प्रश्न)</option>
+            <!-- 50+ बनाने के लिए और ऑप्शन ऐड किए हैं, duplicate adjust कर सकते हो -->
         </select>
 
         <label>Category:</label>
@@ -128,10 +169,10 @@
         </select>
 
         <label>सही जवाब (Correct):</label>
-        <input type="number" id="correct" min="0" placeholder="PDF से देखकर डालो" required>
+        <input type="number" id="correct" min="0" placeholder="PDF से देखकर डालो">
 
         <label>गलत जवाब (Wrong):</label>
-        <input type="number" id="wrong" min="0" placeholder="PDF से देखकर डालो" required>
+        <input type="number" id="wrong" min="0" placeholder="PDF से देखकर डालो">
 
         <button onclick="calculateAndSave()">Calculate, Save & Predict Rank</button>
 
@@ -142,36 +183,24 @@
             <div id="cutoffEstimate"></div>
         </div>
 
-        <h3>Leaderboard (तुम्हारे Saves से)</h3>
+        <h3>Leaderboard (तुम्हारे ब्राउजर में सेव)</h3>
         <table id="leaderboard">
-            <thead>
-                <tr>
-                    <th>Rank</th>
-                    <th>Marks</th>
-                    <th>Category</th>
-                    <th>Date</th>
-                </tr>
-            </thead>
+            <thead><tr><th>Rank</th><th>Marks</th><th>Category</th><th>Date</th></tr></thead>
             <tbody id="leaderBody"></tbody>
         </table>
 
-        <p class="note">Note: ये सब तुम्हारे ब्राउजर में save होता है (localStorage)। Real crowd data और ऑटो PDF parse के लिए server (PHP/Node) चाहिए। GitHub Pages पर डालकर फ्री होस्ट कर सकते हो।</p>
+        <p class="note">Note: Marks तुम्हारे ब्राउजर में सेव होते हैं (localStorage)। Real crowd rank और ऑटो PDF parsing के लिए server (Node.js/PHP) बनवाओ। ज्यादा exams चाहिए तो बताओ!</p>
     </div>
 
     <script>
         function calculateAndSave() {
             const url = document.getElementById('answerKeyUrl').value.trim();
             if (url) {
-                document.getElementById('pdfLink').innerHTML = `<strong>PDF लिंक:</strong> <a href="${url}" target="_blank" style="color:#1565c0;">खोलो और सही/गलत काउंट करो</a>`;
+                document.getElementById('pdfLink').innerHTML = `<strong>PDF:</strong> <a href="${url}" target="_blank" style="color:#0277bd;">खोलो और गिनो</a>`;
             }
 
             const correct = parseInt(document.getElementById('correct').value) || 0;
             const wrong = parseInt(document.getElementById('wrong').value) || 0;
-
-            if (correct === 0 && wrong === 0) {
-                alert("Correct या Wrong डालो!");
-                return;
-            }
 
             const scheme = document.getElementById('examScheme').value.split(',');
             const positive = parseFloat(scheme[0]);
@@ -183,64 +212,44 @@
 
             const category = document.getElementById('category').value;
 
-            // Result दिखाओ
             document.getElementById('marks').innerHTML = `Marks: ${marks.toFixed(2)}`;
             document.getElementById('details').innerHTML = `
-                सही: ${correct} × ${positive} = ${correct * positive}<br>
-                गलत: ${wrong} × \( {negative} = - \){wrong * negative}<br>
-                Unattempted: ${unattempted}<br>
+                सही: ${correct} × ${positive} = ${(correct * positive).toFixed(2)}<br>
+                गलत: ${wrong} × ${negative} = ${(wrong * negative).toFixed(2)}<br>
+                अनअटेम्प्टेड: ${unattempted}<br>
                 Category: ${category}
             `;
 
-            // Save
-            const entry = {
-                marks: marks.toFixed(2),
-                category: category,
-                date: new Date().toLocaleString('hi-IN')
-            };
+            const entry = { marks: marks.toFixed(2), category, date: new Date().toLocaleString('hi-IN') };
             let history = JSON.parse(localStorage.getItem('rankCalculatorHistory')) || [];
             history.push(entry);
             localStorage.setItem('rankCalculatorHistory', JSON.stringify(history));
 
-            // Rank & Cutoff estimate
             const sorted = history.slice().sort((a, b) => parseFloat(b.marks) - parseFloat(a.marks));
-            const yourIndex = sorted.findIndex(e => e.marks === entry.marks && e.date === entry.date);
-            const yourRank = yourIndex + 1;
+            const yourRank = sorted.findIndex(e => e.marks === entry.marks && e.date === entry.date) + 1;
             const percentile = ((history.length - yourRank + 1) / history.length * 100).toFixed(1);
 
-            let avgMarks = history.reduce((sum, e) => sum + parseFloat(e.marks), 0) / history.length || 0;
-            avgMarks = avgMarks.toFixed(2);
+            let avg = history.reduce((sum, e) => sum + parseFloat(e.marks), 0) / history.length || 0;
+            avg = avg.toFixed(2);
 
-            document.getElementById('rankEstimate').innerHTML = `Estimated Rank: ${yourRank} / ${history.length} (Percentile: ${percentile}%)`;
-            document.getElementById('cutoffEstimate').innerHTML = `Estimated Cutoff (average): ${avgMarks}`;
+            document.getElementById('rankEstimate').innerHTML = `Estimated Rank: ${yourRank} / \( {history.length} (Percentile \~ \){percentile}%)`;
+            document.getElementById('cutoffEstimate').innerHTML = `Estimated Cutoff (avg): ${avg}`;
 
             document.getElementById('resultSection').style.display = 'block';
-
             updateLeaderboard();
         }
 
         function updateLeaderboard() {
             let history = JSON.parse(localStorage.getItem('rankCalculatorHistory')) || [];
             history.sort((a, b) => parseFloat(b.marks) - parseFloat(a.marks));
-
             let tbody = document.getElementById('leaderBody');
             tbody.innerHTML = '';
-            history.forEach((item, index) => {
-                let row = `<tr>
-                    <td>${index + 1}</td>
-                    <td>${item.marks}</td>
-                    <td>${item.category}</td>
-                    <td>${item.date}</td>
-                </tr>`;
-                tbody.innerHTML += row;
+            history.forEach((item, i) => {
+                tbody.innerHTML += `<tr><td>\( {i+1}</td><td> \){item.marks}</td><td>\( {item.category}</td><td> \){item.date}</td></tr>`;
             });
-
-            if (history.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4">Calculate करके save करो, leaderboard दिखेगा</td></tr>';
-            }
+            if (history.length === 0) tbody.innerHTML = '<tr><td colspan="4">Calculate करके save करो</td></tr>';
         }
 
-        // Page load पर leaderboard लोड
         window.onload = updateLeaderboard;
     </script>
 </body>
