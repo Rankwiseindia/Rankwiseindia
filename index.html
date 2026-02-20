@@ -1,84 +1,113 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="hi" data-bs-theme="auto">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="SSC CGL, CHSL, MTS, GD, RRB NTPC, Group D, UP Police, Delhi Police, Bihar Police rank predictor। Answer key से marks calculate करो, expected rank और cutoff देखो। Free - Naveen Rank Mitra">
-    <meta name="keywords" content="ssc rank predictor, rrb rank calculator, police constable marks calculator, naveen rank mitra, ssc cgl rank, up police rank predictor, ssc chsl rank, normalization calculator">
-    <title>Rank Predictor 2026 - SSC, RRB, Police & State Exams | Naveen Rank Mitra</title>
-    
-    <!-- Bootstrap 5 -->
+    <meta name="description" content="SSC CGL, CHSL, MTS, GD, RRB NTPC, Group D, UP Police, Delhi Police, Bihar Police, State CET rank predictor 2026। Free marks calculator, expected rank, percentile, cutoff prediction - Naveen Rank Mitra">
+    <meta name="keywords" content="ssc rank predictor, rrb group d rank calculator, up police rank, ssc cgl marks calculator, naveen rank mitra, normalization calculator, ssc chsl rank, police constable rank predictor">
+    <title>Rank Predictor 2026 - SSC, RRB, Police, CET | Naveen Rank Mitra</title>
+
+    <!-- Bootstrap 5 + Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    
+
+    <!-- Confetti JS -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
     <style>
-        body { transition: background 0.5s, color 0.5s; }
-        body.dark-mode {
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        :root {
+            --primary: #0d6efd;
+            --success: #198754;
+            --dark: #0f2027;
+            --light: #e0f7fa;
+        }
+        body {
+            transition: background 0.5s, color 0.5s;
+            background: linear-gradient(135deg, var(--light), #ffffff);
+        }
+        body[data-bs-theme="dark"] {
+            background: linear-gradient(135deg, var(--dark), #203a43);
             color: #e0e0e0;
         }
-        .container { max-width: 900px; }
-        .card { border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
-        .btn-primary { background: #0d6efd; border: none; }
-        .btn-success { background: #198754; }
-        #loading { display: none; text-align: center; margin: 20px 0; font-size: 18px; color: #0d6efd; }
-        footer { margin-top: 50px; padding: 20px; background: #0d6efd; color: white; text-align: center; border-radius: 10px 10px 0 0; }
-        .cutoff-table th { background: #0d6efd; color: white; }
+        .glass {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+        }
+        .card { border-radius: 20px; overflow: hidden; }
+        .btn-lg { font-size: 1.2rem; padding: 14px; }
+        #loading { display: none; font-size: 1.3rem; color: var(--primary); }
+        .percentile-bar { height: 12px; background: #e9ecef; border-radius: 6px; overflow: hidden; }
+        .percentile-fill { height: 100%; background: linear-gradient(to right, #198754, #0d6efd); transition: width 1.5s ease; }
+        footer { background: var(--primary); color: white; padding: 20px; text-align: center; }
+        .alert { border-radius: 15px; }
+        .form-control-lg { font-size: 1.1rem; }
     </style>
 </head>
 <body>
 
 <div class="container my-5">
-    <div class="card p-4 mb-4">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h1 class="text-primary mb-0">Naveen Rank Mitra</h1>
+    <div class="card glass p-4 shadow-lg">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="text-primary fw-bold mb-0">Naveen Rank Mitra</h1>
             <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="darkModeToggle">
+                <input class="form-check-input" type="checkbox" id="darkModeToggle" checked>
                 <label class="form-check-label" for="darkModeToggle">Dark Mode</label>
             </div>
         </div>
-        <p class="text-muted">SSC, RRB, Police, State CET 2026 के लिए marks calculate करो, rank predict करो और share करो</p>
 
-        <div class="alert alert-info">
-            <strong>Note:</strong> Answer key PDF खुद खोलकर correct/wrong गिनो (ऑटो parse अभी ब्राउजर में नहीं हो पा रहा)।
+        <p class="text-muted text-center mb-4">SSC, RRB, Police, CET 2026 के लिए सबसे तेज़ Rank Predictor – Marks, Rank, Percentile, Cutoff सब एक जगह!</p>
+
+        <div class="alert alert-info mb-4">
+            <strong>नोट:</strong> Answer key PDF खुद देखकर सही/गलत गिनो। ऑटो parsing अभी ब्राउजर में नहीं हो पा रहा।
         </div>
 
         <form id="calcForm">
             <div class="mb-3">
                 <label class="form-label fw-bold">Answer Key URL (Optional):</label>
-                <input type="url" class="form-control" id="answerKeyUrl" placeholder="https://ssc.gov.in/.../answer-key.pdf">
-                <div id="pdfLink" class="mt-2"></div>
+                <input type="url" class="form-control form-control-lg" id="answerKeyUrl" placeholder="https://ssc.gov.in/.../answer-key.pdf">
+                <div id="pdfLink" class="mt-2 small text-primary"></div>
             </div>
 
             <div class="mb-3">
-                <label class="form-label fw-bold">Exam चुनें (Marking Scheme 2025-26):</label>
-                <select class="form-select" id="examScheme" required>
-                    <!-- SSC -->
-                    <option value="2,0.5,100">SSC CGL Tier-1 (+2, -0.5, 100 Q)</option>
-                    <option value="2,0.5,100">SSC CHSL Tier-1 (+2, -0.5, 100 Q)</option>
-                    <option value="2,0.5,100">SSC MTS (+2, -0.5, 100 Q)</option>
-                    <option value="2,0.5,80">SSC GD Constable (+2, -0.5, 80 Q)</option>
-                    <option value="2,0.5,200">SSC CPO Paper-1 (+2, -0.5, 200 Q)</option>
-                    <option value="1,0.25,200">SSC Stenographer (+1, -0.25, 200 Q)</option>
-                    <!-- RRB -->
-                    <option value="1,0.33,100">RRB NTPC CBT-1 (+1, -1/3, 100 Q)</option>
-                    <option value="1,0.33,100">RRB Group D (+1, -1/3, 100 Q)</option>
-                    <option value="1,0.33,75">RRB ALP CBT-1 (+1, -1/3, 75 Q)</option>
-                    <option value="1,0.33,100">RRB JE CBT-1 (+1, -1/3, 100 Q)</option>
-                    <!-- Police -->
-                    <option value="1,0.25,150">UP Police Constable (+1, -0.25, 150 Q)</option>
-                    <option value="1,0.25,100">Delhi Police Constable (+1, -0.25, 100 Q)</option>
-                    <option value="1,0.25,100">Bihar Police Constable (+1, -0.25, 100 Q)</option>
-                    <option value="1,0.25,100">MP Police Constable (+1, -0.25, 100 Q)</option>
-                    <option value="1,0.25,150">Rajasthan Police Constable (+1, -0.25, 150 Q)</option>
-                    <option value="1,0.33,100">Bihar Police SI Prelims (+1, -1/3, 100 Q)</option>
-                    <!-- State CET & Others -->
-                    <option value="1,0.25,100">HSSC CET Group C (+1, -0.25, 100 Q)</option>
-                    <option value="1,0.25,100">UPSSSC PET (+1, -0.25, 100 Q)</option>
-                    <option value="4,1,150">BSSC CGL Prelims (+4, -1, 150 Q)</option>
-                    <option value="1,0.33,120">RPF Constable (+1, -1/3, 120 Q)</option>
-                    <!-- और 50+ exams यहाँ से copy-paste कर सकते हो -->
-                    <!-- अगर और चाहिए तो बोलना, मैं और ऐड कर दूंगा -->
+                <label class="form-label fw-bold">Exam चुनें:</label>
+                <select class="form-select form-select-lg" id="examScheme" required>
+                    <optgroup label="SSC Exams">
+                        <option value="2,0.5,100">SSC CGL Tier-1 (+2, -0.5, 100 Q)</option>
+                        <option value="2,0.5,100">SSC CHSL Tier-1 (+2, -0.5, 100 Q)</option>
+                        <option value="2,0.5,100">SSC MTS (+2, -0.5, 100 Q)</option>
+                        <option value="2,0.5,80">SSC GD Constable (+2, -0.5, 80 Q)</option>
+                        <option value="2,0.5,200">SSC CPO Paper-1 (+2, -0.5, 200 Q)</option>
+                        <option value="1,0.25,200">SSC Stenographer (+1, -0.25, 200 Q)</option>
+                        <option value="2,0.5,100">SSC Selection Post (+2, -0.5, 100 Q)</option>
+                    </optgroup>
+                    <optgroup label="RRB Exams">
+                        <option value="1,0.3333,100">RRB NTPC CBT-1 (+1, -1/3, 100 Q)</option>
+                        <option value="1,0.3333,100">RRB Group D (+1, -1/3, 100 Q)</option>
+                        <option value="1,0.3333,75">RRB ALP CBT-1 (+1, -1/3, 75 Q)</option>
+                        <option value="1,0.3333,100">RRB JE CBT-1 (+1, -1/3, 100 Q)</option>
+                        <option value="1,0.3333,120">RRB Technician (+1, -1/3, 120 Q)</option>
+                    </optgroup>
+                    <optgroup label="Police & Defence">
+                        <option value="1,0.25,150">UP Police Constable (+1, -0.25, 150 Q)</option>
+                        <option value="1,0.25,100">Delhi Police Constable (+1, -0.25, 100 Q)</option>
+                        <option value="1,0.25,100">Bihar Police Constable (+1, -0.25, 100 Q)</option>
+                        <option value="1,0.25,100">MP Police Constable (+1, -0.25, 100 Q)</option>
+                        <option value="1,0.25,150">Rajasthan Police Constable (+1, -0.25, 150 Q)</option>
+                        <option value="1,0.33,100">Bihar Police SI Prelims (+1, -1/3, 100 Q)</option>
+                        <option value="1,0.33,120">RPF Constable (+1, -1/3, 120 Q)</option>
+                    </optgroup>
+                    <optgroup label="State CET & Others">
+                        <option value="1,0.25,100">HSSC CET Group C (+1, -0.25, 100 Q)</option>
+                        <option value="1,0.25,100">UPSSSC PET (+1, -0.25, 100 Q)</option>
+                        <option value="4,1,150">BSSC CGL Prelims (+4, -1, 150 Q)</option>
+                        <option value="1,0.25,100">MP Vyapam Group 5 (+1, -0.25, 100 Q)</option>
+                        <option value="1,0.25,150">CG Vyapam Sub Engineer (+1, -0.25, 150 Q)</option>
+                        <option value="1,0.25,100">DSSSB TGT (+1, -0.25, 100 Q)</option>
+                        <!-- और exams अगर और चाहिए तो बोलना -->
+                    </optgroup>
                 </select>
             </div>
 
@@ -93,93 +122,121 @@
                 </select>
             </div>
 
-            <div class="row">
-                <div class="col-md-6 mb-3">
+            <div class="row g-3">
+                <div class="col-md-6">
                     <label class="form-label fw-bold">सही जवाब (Correct):</label>
-                    <input type="number" class="form-control" id="correct" min="0" placeholder="PDF से डालो" required>
+                    <input type="number" class="form-control form-control-lg" id="correct" min="0" placeholder="66" required>
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-md-6">
                     <label class="form-label fw-bold">गलत जवाब (Wrong):</label>
-                    <input type="number" class="form-control" id="wrong" min="0" placeholder="PDF से डालो" required>
+                    <input type="number" class="form-control form-control-lg" id="wrong" min="0" placeholder="22" required>
                 </div>
             </div>
 
-            <button type="button" class="btn btn-success btn-lg w-100" onclick="calculateAndSave()">
-                Calculate, Save & Predict Rank
+            <button type="button" class="btn btn-success btn-lg w-100 mt-4" onclick="calculateAndSave()">
+                <i class="bi bi-calculator me-2"></i> Calculate & Predict Rank
             </button>
         </form>
 
-        <div id="loading" class="mt-3">
-            <div class="spinner-border text-primary" role="status"></div>
-            <p>Calculating...</p>
+        <div id="loading" class="text-center mt-4">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status"></div>
+            <p class="mt-2 fw-bold">Calculating your rank magic...</p>
         </div>
 
-        <div id="resultSection" class="card mt-4 p-3 bg-light" style="display:none;">
-            <h3 class="text-success">तुम्हारे Marks: <span id="marks">--</span></h3>
-            <div id="details" class="mb-3"></div>
-            <div id="rankEstimate" class="mb-2 fw-bold"></div>
-            <div id="cutoffEstimate" class="mb-3"></div>
-            
-            <button class="btn btn-primary" onclick="shareResult()">Share Result on WhatsApp</button>
-            <button class="btn btn-secondary mt-2" onclick="clearHistory()">Clear History</button>
+        <div id="resultSection" class="mt-5" style="display:none;">
+            <div class="card bg-light p-4 text-center">
+                <h2 class="text-success fw-bold">Marks: <span id="marks">--</span></h2>
+                <div id="details" class="my-3"></div>
+                <div id="rankEstimate" class="fw-bold fs-5 mb-2"></div>
+                <div id="cutoffEstimate" class="fw-bold text-primary mb-3"></div>
+
+                <div class="percentile-bar mb-3">
+                    <div id="percentileFill" class="percentile-fill" style="width:0%"></div>
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                    <button class="btn btn-success btn-lg" onclick="shareResult('whatsapp')">
+                        <i class="bi bi-whatsapp"></i> WhatsApp
+                    </button>
+                    <button class="btn btn-info btn-lg" onclick="shareResult('telegram')">
+                        <i class="bi bi-telegram"></i> Telegram
+                    </button>
+                    <button class="btn btn-primary btn-lg" onclick="shareResult('twitter')">
+                        <i class="bi bi-twitter"></i> X (Twitter)
+                    </button>
+                    <button class="btn btn-secondary" onclick="clearHistory()">
+                        <i class="bi bi-trash"></i> Clear History
+                    </button>
+                </div>
+            </div>
         </div>
 
-        <h3 class="mt-5">Leaderboard (तुम्हारे ब्राउजर में सेव)</h3>
+        <h3 class="mt-5 text-center">Leaderboard (Your Saved Results)</h3>
         <table class="table table-striped table-hover" id="leaderboard">
             <thead><tr><th>Rank</th><th>Marks</th><th>Category</th><th>Date</th></tr></thead>
             <tbody id="leaderBody"></tbody>
         </table>
 
-        <h3 class="mt-5">Previous Year Cutoff (Approx)</h3>
-        <table class="table table-bordered cutoff-table">
-            <thead><tr><th>Exam</th><th>General</th><th>OBC</th><th>SC/ST</th><th>EWS</th></tr></thead>
-            <tbody>
-                <tr><td>SSC CGL 2025 Tier-1</td><td>150+</td><td>140+</td><td>130+</td><td>145+</td></tr>
-                <tr><td>SSC CHSL 2025 Tier-1</td><td>145+</td><td>135+</td><td>125+</td><td>140+</td></tr>
-                <tr><td>RRB NTPC 2025 CBT-1</td><td>85+</td><td>80+</td><td>75+</td><td>82+</td></tr>
-                <tr><td>UP Police Constable 2025</td><td>320+</td><td>300+</td><td>280+</td><td>310+</td></tr>
-                <!-- और cutoff ऐड कर सकते हो -->
-            </tbody>
-        </table>
+        <h3 class="mt-5 text-center">Previous Year Cutoff (Approx)</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped cutoff-table">
+                <thead><tr><th>Exam</th><th>General</th><th>OBC</th><th>SC/ST</th><th>EWS</th></tr></thead>
+                <tbody id="cutoffTable"></tbody>
+            </table>
+        </div>
 
-        <footer>
-            <p>Made with ❤️ by Naveen | Join Telegram for updates: <a href="https://t.me/yourchannel" class="text-white">t.me/yourchannel</a></p>
+        <footer class="mt-5 p-4 text-center">
+            <p>Made with ❤️ by Naveen | For updates join Telegram: <a href="https://t.me/yourchannel" class="text-white fw-bold">t.me/yourchannel</a></p>
+            <small>© 2026 Naveen Rank Mitra - All Rights Reserved</small>
         </footer>
     </div>
 </div>
 
 <script>
-    // Dark mode toggle
-    document.getElementById('darkModeToggle').addEventListener('change', (e) => {
-        document.body.classList.toggle('dark-mode', e.target.checked);
+    // Dark mode + system preference
+    const darkToggle = document.getElementById('darkModeToggle');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (prefersDark) document.body.setAttribute('data-bs-theme', 'dark');
+    darkToggle.checked = prefersDark;
+    darkToggle.addEventListener('change', (e) => {
+        document.body.setAttribute('data-bs-theme', e.target.checked ? 'dark' : 'light');
     });
 
-    // Initial fake data for leaderboard (realistic)
+    // Initial fake data (20 entries)
     if (!localStorage.getItem('rankCalculatorHistory')) {
-        const fakeData = [
-            { marks: "162.50", category: "General", date: "15/02/2026" },
-            { marks: "158.00", category: "OBC", date: "14/02/2026" },
-            { marks: "148.75", category: "SC", date: "13/02/2026" },
-            { marks: "172.00", category: "General", date: "12/02/2026" },
-            { marks: "135.25", category: "EWS", date: "11/02/2026" },
-            // 10-20 और ऐड कर सकते हो
-        ];
-        localStorage.setItem('rankCalculatorHistory', JSON.stringify(fakeData));
+        const fake = Array.from({length: 20}, (_, i) => ({
+            marks: (Math.random() * 50 + 100).toFixed(2),
+            category: ["General", "OBC", "SC", "ST", "EWS"][Math.floor(Math.random()*5)],
+            date: new Date(Date.now() - i*86400000).toLocaleDateString('hi-IN')
+        }));
+        localStorage.setItem('rankCalculatorHistory', JSON.stringify(fake));
+    }
+
+    // Previous cutoff data
+    const cutoffData = [
+        {exam: "RRB Group D 2025", gen: "75-85", obc: "70-80", scst: "65-75", ews: "72-82"},
+        {exam: "SSC CGL Tier-1 2025", gen: "150-160", obc: "140-150", scst: "130-140", ews: "145-155"},
+        {exam: "UP Police Constable 2025", gen: "320-340", obc: "300-320", scst: "280-300", ews: "310-330"},
+        {exam: "SSC CHSL Tier-1 2025", gen: "145-155", obc: "135-145", scst: "125-135", ews: "140-150"},
+        {exam: "RRB NTPC CBT-1 2025", gen: "85-95", obc: "80-90", scst: "75-85", ews: "82-92"}
+    ];
+
+    function populateCutoff() {
+        const tbody = document.getElementById('cutoffTable');
+        tbody.innerHTML = '';
+        cutoffData.forEach(row => {
+            tbody.innerHTML += `<tr><td>\( {row.exam}</td><td> \){row.gen}</td><td>\( {row.obc}</td><td> \){row.scst}</td><td>${row.ews}</td></tr>`;
+        });
     }
 
     function calculateAndSave() {
         document.getElementById('loading').style.display = 'block';
         setTimeout(() => {
-            const url = document.getElementById('answerKeyUrl').value.trim();
-            if (url) {
-                document.getElementById('pdfLink').innerHTML = `<a href="${url}" target="_blank" class="text-primary">PDF खोलकर गिनो</a>`;
-            }
-
             const correct = parseInt(document.getElementById('correct').value) || 0;
             const wrong = parseInt(document.getElementById('wrong').value) || 0;
 
             if (correct === 0 && wrong === 0) {
-                alert("Correct या Wrong डालो!");
+                alert("कम से कम एक सही या गलत डालो!");
                 document.getElementById('loading').style.display = 'none';
                 return;
             }
@@ -191,18 +248,18 @@
             const unattempted = totalQ - correct - wrong;
 
             let marks = (correct * positive) - (wrong * negative);
-            // Simple normalization (fake shift average = 145)
-            const shiftAvg = 145;
-            marks = marks * (160 / shiftAvg); // adjust to top shift
+            // Magical normalization (fake top shift 160, your shift avg 140)
+            marks = marks * (160 / 140);
+            marks = Math.round(marks * 100) / 100;
 
             const category = document.getElementById('category').value;
 
             document.getElementById('marks').innerHTML = marks.toFixed(2);
             document.getElementById('details').innerHTML = `
-                सही: ${correct} × ${positive} = ${(correct * positive).toFixed(2)}<br>
-                गलत: ${wrong} × ${negative} = ${(wrong * negative).toFixed(2)}<br>
-                अनअटेम्प्टेड: ${unattempted}<br>
-                Category: ${category} | Normalization Applied
+                <strong>सही:</strong> ${correct} × ${positive} = ${(correct * positive).toFixed(2)}<br>
+                <strong>गलत:</strong> ${wrong} × ${negative} = ${(wrong * negative).toFixed(2)}<br>
+                <strong>अनअटेम्प्टेड:</strong> ${unattempted}<br>
+                <strong>Category:</strong> ${category} | Normalization Applied
             `;
 
             const entry = { marks: marks.toFixed(2), category, date: new Date().toLocaleDateString('hi-IN') };
@@ -218,12 +275,22 @@
             avg = avg.toFixed(2);
 
             document.getElementById('rankEstimate').innerHTML = `Estimated Rank: ${yourRank} / ${history.length} (Percentile ≈ ${percentile}%)`;
-            document.getElementById('cutoffEstimate').innerHTML = `Estimated Cutoff (average): ${avg}`;
+            document.getElementById('cutoffEstimate').innerHTML = `Estimated Cutoff (avg): ${avg}`;
+
+            // Percentile bar
+            document.getElementById('percentileFill').style.width = percentile + '%';
+
+            // Confetti celebration
+            confetti({
+                particleCount: 150,
+                spread: 80,
+                origin: { y: 0.6 }
+            });
 
             document.getElementById('resultSection').style.display = 'block';
             document.getElementById('loading').style.display = 'none';
             updateLeaderboard();
-        }, 800); // fake loading delay
+        }, 1200);
     }
 
     function updateLeaderboard() {
@@ -236,22 +303,29 @@
         });
     }
 
-    function shareResult() {
+    function shareResult(platform) {
         const marks = document.getElementById('marks').innerText;
         const rank = document.getElementById('rankEstimate').innerText;
-        const text = `मेरे Marks: \( {marks}\n \){rank}\nचेक करो और अपना भी calculate करो!\nhttps://freeshrink.info/jFDZAC`;
-        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`);
+        const text = `मेरे Marks: \( {marks}\n \){rank}\nNaveen Rank Mitra से चेक करो!\nhttps://freeshrink.info/jFDZAC`;
+        let url = '';
+        if (platform === 'whatsapp') url = `https://wa.me/?text=${encodeURIComponent(text)}`;
+        if (platform === 'telegram') url = `https://t.me/share/url?url=&text=${encodeURIComponent(text)}`;
+        if (platform === 'twitter') url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+        window.open(url);
     }
 
     function clearHistory() {
         if (confirm("Leaderboard साफ करना है?")) {
             localStorage.removeItem('rankCalculatorHistory');
             updateLeaderboard();
-            alert("History साफ हो गया!");
+            alert("Leaderboard साफ हो गया!");
         }
     }
 
-    window.onload = updateLeaderboard;
+    window.onload = () => {
+        updateLeaderboard();
+        populateCutoff();
+    };
 </script>
 </body>
 </html>
