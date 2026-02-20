@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="SSC CGL, CHSL, MTS, GD, RRB NTPC, Group D, UP Police, Delhi Police, Bihar Police, State CET rank predictor 2026। Free marks calculator, expected rank, percentile, cutoff prediction - Naveen Rank Mitra">
-    <meta name="keywords" content="ssc rank predictor, rrb group d rank calculator, up police rank, ssc cgl marks calculator, naveen rank mitra, normalization calculator, ssc chsl rank, police constable rank predictor, rrb ntpc rank, upsssc pet rank, hssc cet rank">
-    <meta name="author" content="Naveen">
-    <title>Rank Predictor 2026 - SSC, RRB, Police, CET & All Govt Exams | Naveen Rank Mitra</title>
+    <meta name="description" content="SSC CGL, CHSL, MTS, GD, RRB NTPC, Group D, UP Police, Delhi Police, Bihar Police, State CET rank predictor 2026। Free marks calculator, expected rank, percentile, cutoff prediction - Naveen Rank Exam India">
+    <meta name="keywords" content="ssc rank predictor, rrb group d rank calculator, up police rank, ssc cgl marks calculator, naveen rank exam india, normalization calculator, ssc chsl rank, police constable rank predictor">
+    <title>Rank Predictor 2026 - SSC, RRB, Police, CET | Naveen Rank Exam India</title>
 
     <!-- Bootstrap 5 + Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -16,16 +15,12 @@
     <!-- Confetti JS -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
-
     <style>
         :root {
             --primary: #0d6efd;
             --primary-dark: #0b5ed7;
             --success: #198754;
             --dark-bg: #0f2027;
-            --dark-card: #1a2a34;
             --light-bg: #e0f7fa;
         }
         body {
@@ -68,8 +63,9 @@
             transition: transform 0.3s;
         }
         .freedom-gallery img:hover { transform: scale(1.08); }
-        footer a { color: white; text-decoration: none; }
-        footer a:hover { text-decoration: underline; }
+        footer { background: var(--primary); color: white; padding: 40px 0; }
+        footer a { color: #ffd700; text-decoration: none; font-weight: bold; }
+        footer a:hover { text-decoration: underline; color: white; }
         .percentile-bar {
             height: 15px;
             background: #e9ecef;
@@ -96,6 +92,8 @@
             border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
+        .form-control { border-color: var(--primary); }
+        .form-control:focus { border-color: var(--primary-dark); box-shadow: 0 0 0 0.25rem rgba(13,110,253,0.25); }
     </style>
 </head>
 <body>
@@ -104,13 +102,13 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top shadow">
     <div class="container">
         <a class="navbar-brand fw-bold fs-4" href="#">
-            <i class="bi bi-graph-up-arrow me-2"></i>Naveen Rank Mitra
+            <i class="bi bi-graph-up-arrow me-2"></i>Naveen Rank Exam India
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto fs-5">
                 <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="#exams">Exams List</a></li>
                 <li class="nav-item"><a class="nav-link" href="#cutoff">Cut-off</a></li>
@@ -125,97 +123,82 @@
 <!-- Hero Banner -->
 <div class="hero text-center">
     <div class="container">
-        <h1 class="display-3 fw-bold mb-3">Naveen Rank Mitra</h1>
+        <h1 class="display-3 fw-bold mb-3">Naveen Rank Exam India</h1>
         <p class="lead fs-4 mb-4">SSC, RRB, Police, CET & All Government Exams 2026 के लिए सबसे तेज़ और सटीक Rank Predictor</p>
         <p class="fs-5">Answer key से marks डालो – Expected Rank, Percentile, Cutoff सब पल में पता चल जाएगा!</p>
-        <a href="#calcForm" class="btn btn-light btn-lg mt-3 px-5 py-3 fw-bold">अभी Calculate करो →</a>
+        <a href="#calculator" class="btn btn-light btn-lg mt-3 px-5 py-3 fw-bold">अभी Calculate करो →</a>
     </div>
 </div>
 
 <div class="container my-5">
     <!-- Calculator Section -->
-    <div class="card glass p-4 shadow-lg mb-5" id="calcForm">
+    <div class="card glass p-4 shadow-lg mb-5" id="calculator">
         <h3 class="text-center mb-4 text-primary fw-bold">Rank Predictor Calculator 2026</h3>
 
-        <form>
+        <form id="calcForm">
+            <div class="mb-3">
+                <label class="form-label fw-bold">Answer Key URL (Optional):</label>
+                <input type="url" class="form-control form-control-lg" id="answerKeyUrl" placeholder="https://ssc.gov.in/.../answer-key.pdf">
+                <div id="pdfLink" class="mt-2 small text-primary"></div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Exam चुनें (Marking Scheme 2025-26):</label>
+                <select class="form-select form-select-lg" id="examScheme" required>
+                    <option value="1,0.3333,100">RRB Group D (+1 सही, -1/3 गलत, 100 प्रश्न)</option>
+                    <option value="2,0.5,100">SSC CGL Tier-1 (+2 सही, -0.5 गलत, 100 प्रश्न)</option>
+                    <option value="2,0.5,100">SSC CHSL Tier-1 (+2 सही, -0.5 गलत, 100 प्रश्न)</option>
+                    <option value="2,0.5,100">SSC MTS (+2 सही, -0.5 गलत, 100 प्रश्न)</option>
+                    <option value="2,0.5,80">SSC GD Constable (+2 सही, -0.5 गलत, 80 प्रश्न)</option>
+                    <option value="2,0.5,200">SSC CPO Paper-1 (+2 सही, -0.5 गलत, 200 प्रश्न)</option>
+                    <option value="1,0.25,200">SSC Stenographer (+1 सही, -0.25 गलत, 200 प्रश्न)</option>
+                    <option value="1,0.3333,100">RRB NTPC CBT-1 (+1 सही, -1/3 गलत, 100 प्रश्न)</option>
+                    <option value="1,0.3333,75">RRB ALP CBT-1 (+1 सही, -1/3 गलत, 75 प्रश्न)</option>
+                    <option value="1,0.3333,100">RRB JE CBT-1 (+1 सही, -1/3 गलत, 100 प्रश्न)</option>
+                    <option value="1,0.25,150">UP Police Constable (+1 सही, -0.25 गलत, 150 प्रश्न)</option>
+                    <option value="1,0.25,100">Delhi Police Constable (+1 सही, -0.25 गलत, 100 प्रश्न)</option>
+                    <option value="1,0.25,100">Bihar Police Constable (+1 सही, -0.25 गलत, 100 प्रश्न)</option>
+                    <option value="1,0.25,100">MP Police Constable (+1 सही, -0.25 गलत, 100 प्रश्न)</option>
+                    <option value="1,0.25,150">Rajasthan Police Constable (+1 सही, -0.25 गलत, 150 प्रश्न)</option>
+                    <option value="1,0.33,100">Bihar Police SI Prelims (+1 सही, -1/3 गलत, 100 प्रश्न)</option>
+                    <option value="1,0.33,120">RPF Constable (+1 सही, -1/3 गलत, 120 प्रश्न)</option>
+                    <option value="1,0.25,100">HSSC CET Group C (+1 सही, -0.25 गलत, 100 प्रश्न)</option>
+                    <option value="1,0.25,100">UPSSSC PET (+1 सही, -0.25 गलत, 100 प्रश्न)</option>
+                    <option value="4,1,150">BSSC CGL Prelims (+4 सही, -1 गलत, 150 प्रश्न)</option>
+                    <!-- 120+ exams – और चाहिए तो बोलना -->
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-bold">Category:</label>
+                <select class="form-select form-select-lg" id="category" required>
+                    <option value="General">General</option>
+                    <option value="OBC">OBC</option>
+                    <option value="SC">SC</option>
+                    <option value="ST">ST</option>
+                    <option value="EWS">EWS</option>
+                </select>
+            </div>
+
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label fw-bold">Answer Key URL (Optional):</label>
-                    <input type="url" class="form-control form-control-lg" id="answerKeyUrl" placeholder="https://ssc.gov.in/.../answer-key.pdf">
-                    <div id="pdfLink" class="mt-2 small text-primary"></div>
+                    <label class="form-label fw-bold">सही जवाब (Correct):</label>
+                    <input type="number" class="form-control form-control-lg" id="correct" min="0" placeholder="जितने सही किए" required>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label fw-bold">Exam चुनें:</label>
-                    <select class="form-select form-select-lg" id="examScheme" required>
-                        <optgroup label="SSC Exams">
-                            <option value="2,0.5,100">SSC CGL Tier-1 (+2, -0.5, 100 Q)</option>
-                            <option value="2,0.5,100">SSC CHSL Tier-1 (+2, -0.5, 100 Q)</option>
-                            <option value="2,0.5,100">SSC MTS (+2, -0.5, 100 Q)</option>
-                            <option value="2,0.5,80">SSC GD Constable (+2, -0.5, 80 Q)</option>
-                            <option value="2,0.5,200">SSC CPO Paper-1 (+2, -0.5, 200 Q)</option>
-                            <option value="1,0.25,200">SSC Stenographer (+1, -0.25, 200 Q)</option>
-                            <option value="2,0.5,100">SSC Selection Post (+2, -0.5, 100 Q)</option>
-                        </optgroup>
-                        <optgroup label="RRB Exams">
-                            <option value="1,0.3333,100">RRB NTPC CBT-1 (+1, -1/3, 100 Q)</option>
-                            <option value="1,0.3333,100">RRB Group D (+1, -1/3, 100 Q)</option>
-                            <option value="1,0.3333,75">RRB ALP CBT-1 (+1, -1/3, 75 Q)</option>
-                            <option value="1,0.3333,100">RRB JE CBT-1 (+1, -1/3, 100 Q)</option>
-                            <option value="1,0.3333,120">RRB Technician (+1, -1/3, 120 Q)</option>
-                        </optgroup>
-                        <optgroup label="Police & Defence">
-                            <option value="1,0.25,150">UP Police Constable (+1, -0.25, 150 Q)</option>
-                            <option value="1,0.25,100">Delhi Police Constable (+1, -0.25, 100 Q)</option>
-                            <option value="1,0.25,100">Bihar Police Constable (+1, -0.25, 100 Q)</option>
-                            <option value="1,0.25,100">MP Police Constable (+1, -0.25, 100 Q)</option>
-                            <option value="1,0.25,150">Rajasthan Police Constable (+1, -0.25, 150 Q)</option>
-                            <option value="1,0.33,100">Bihar Police SI Prelims (+1, -1/3, 100 Q)</option>
-                            <option value="1,0.33,120">RPF Constable (+1, -1/3, 120 Q)</option>
-                        </optgroup>
-                        <optgroup label="State CET & Others">
-                            <option value="1,0.25,100">HSSC CET Group C (+1, -0.25, 100 Q)</option>
-                            <option value="1,0.25,100">UPSSSC PET (+1, -0.25, 100 Q)</option>
-                            <option value="4,1,150">BSSC CGL Prelims (+4, -1, 150 Q)</option>
-                            <option value="1,0.25,100">MP Vyapam Group 5 (+1, -0.25, 100 Q)</option>
-                            <option value="1,0.25,150">CG Vyapam Sub Engineer (+1, -0.25, 150 Q)</option>
-                            <option value="1,0.25,100">DSSSB TGT (+1, -0.25, 100 Q)</option>
-                            <!-- 100+ exams – और चाहिए तो बोलना -->
-                        </optgroup>
-                    </select>
+                    <label class="form-label fw-bold">गलत जवाब (Wrong):</label>
+                    <input type="number" class="form-control form-control-lg" id="wrong" min="0" placeholder="जितने गलत किए" required>
                 </div>
             </div>
 
-            <div class="row g-3 mt-3">
-                <div class="col-md-4">
-                    <label class="form-label fw-bold">Category:</label>
-                    <select class="form-select form-select-lg" id="category" required>
-                        <option value="General">General</option>
-                        <option value="OBC">OBC</option>
-                        <option value="SC">SC</option>
-                        <option value="ST">ST</option>
-                        <option value="EWS">EWS</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label fw-bold">सही जवाब:</label>
-                    <input type="number" class="form-control form-control-lg" id="correct" min="0" placeholder="66" required>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label fw-bold">गलत जवाब:</label>
-                    <input type="number" class="form-control form-control-lg" id="wrong" min="0" placeholder="22" required>
-                </div>
-            </div>
-
-            <div class="d-grid mt-4">
-                <button type="button" class="btn btn-success btn-lg" onclick="calculateAndSave()">
-                    <i class="bi bi-calculator me-2"></i> Calculate Marks & Rank
-                </button>
-            </div>
+            <button type="button" class="btn btn-success btn-lg w-100 mt-4" onclick="calculateAndSave()">
+                <i class="bi bi-calculator me-2"></i> Calculate Marks & Rank
+            </button>
         </form>
 
         <div id="loading" class="text-center mt-4">
             <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status"></div>
-            <p class="mt-2 fw-bold">Calculating your rank magic...</p>
+            <p class="mt-2 fw-bold">Calculating...</p>
         </div>
 
         <div id="resultSection" class="mt-5 card p-4 bg-light shadow" style="display:none;">
@@ -228,7 +211,7 @@
                 <div id="percentileFill" class="percentile-fill" style="width:0%"></div>
             </div>
 
-            <div class="d-grid gap-3 d-md-flex justify-content-md-center">
+            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
                 <button class="btn btn-success btn-lg" onclick="shareResult('whatsapp')">
                     <i class="bi bi-whatsapp"></i> WhatsApp
                 </button>
@@ -247,58 +230,63 @@
 
     <!-- Freedom Fighters Gallery -->
     <div class="card glass p-4 shadow-lg mt-5" id="freedom">
-        <h3 class="text-center mb-4 text-primary">Our Brave Freedom Fighters</h3>
+        <h3 class="text-center mb-4 text-primary fw-bold">हमारे बहादुर स्वतंत्रता सेनानी</h3>
         <div class="freedom-gallery d-flex flex-wrap justify-content-center">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Bhagat_Singh_1929.jpg/220px-Bhagat_Singh_1929.jpg" alt="भगत सिंह">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Subhas_Chandra_Bose_NRB.jpg/220px-Subhas_Chandra_Bose_NRB.jpg" alt="सुभाष चंद्र बोस">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Rani_Lakshmi_Bai.jpg/220px-Rani_Lakshmi_Bai.jpg" alt="रानी लक्ष्मीबाई">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Mangal_Pandey.jpg/220px-Mangal_Pandey.jpg" alt="मंगल पांडे">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Chandra_Shekhar_Azad.jpg/220px-Chandra_Shekhar_Azad.jpg" alt="चंद्रशेखर आजाद">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Sardar_Patel.jpg/220px-Sardar_Patel.jpg" alt="सरदार पटेल">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Bhagat_Singh_1929.jpg/220px-Bhagat_Singh_1929.jpg" alt="भगत सिंह" title="भगत सिंह">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Subhas_Chandra_Bose_NRB.jpg/220px-Subhas_Chandra_Bose_NRB.jpg" alt="सुभाष चंद्र बोस" title="सुभाष चंद्र बोस">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Rani_Lakshmi_Bai.jpg/220px-Rani_Lakshmi_Bai.jpg" alt="रानी लक्ष्मीबाई" title="रानी लक्ष्मीबाई">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Mangal_Pandey.jpg/220px-Mangal_Pandey.jpg" alt="मंगल पांडे" title="मंगल पांडे">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Chandra_Shekhar_Azad.jpg/220px-Chandra_Shekhar_Azad.jpg" alt="चंद्रशेखर आजाद" title="चंद्रशेखर आजाद">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Sardar_Patel.jpg/220px-Sardar_Patel.jpg" alt="सरदार पटेल" title="सरदार पटेल">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Mahatma_Gandhi_1931.jpg/220px-Mahatma_Gandhi_1931.jpg" alt="महात्मा गांधी" title="महात्मा गांधी">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Jawaharlal_Nehru.jpg/220px-Jawaharlal_Nehru.jpg" alt="जवाहरलाल नेहरू" title="जवाहरलाल नेहरू">
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer>
+    <!-- Footer with Govt Links -->
+    <footer id="contact">
         <div class="container">
-            <div class="row">
-                <div class="col-md-4 mb-4">
-                    <h5>Useful Government Links</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="https://ssc.gov.in" class="footer-link">Staff Selection Commission (SSC)</a></li>
-                        <li><a href="https://rrbcdg.gov.in" class="footer-link">Railway Recruitment Board</a></li>
-                        <li><a href="https://uppbpb.gov.in" class="footer-link">Uttar Pradesh Police</a></li>
-                        <li><a href="https://delhipolice.gov.in" class="footer-link">Delhi Police</a></li>
-                        <li><a href="https://biharpolice.bihar.gov.in" class="footer-link">Bihar Police</a></li>
-                        <li><a href="https://upsc.gov.in" class="footer-link">Union Public Service Commission</a></li>
-                        <li><a href="https://mha.gov.in" class="footer-link">Ministry of Home Affairs</a></li>
-                        <li><a href="https://dopt.gov.in" class="footer-link">Department of Personnel & Training</a></li>
-                        <li><a href="https://hssc.gov.in" class="footer-link">Haryana Staff Selection Commission</a></li>
-                        <li><a href="https://bpsc.bih.nic.in" class="footer-link">Bihar Public Service Commission</a></li>
-                        <!-- और 20+ लिंक्स ऐड कर सकते हो -->
-                    </ul>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <h5>Quick Links</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="footer-link">Home</a></li>
-                        <li><a href="#exams" class="footer-link">All Exams</a></li>
-                        <li><a href="#cutoff" class="footer-link">Cut-off List</a></li>
-                        <li><a href="#freedom" class="footer-link">Freedom Fighters</a></li>
-                        <li><a href="#contact" class="footer-link">Contact Us</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-4">
-                    <h5>Contact & Follow</h5>
-                    <p>Follow us for updates & new predictors</p>
-                    <a href="https://t.me/yourchannel" class="btn btn-outline-light me-2"><i class="bi bi-telegram"></i> Telegram</a>
-                    <a href="#" class="btn btn-outline-light"><i class="bi bi-instagram"></i> Instagram</a>
-                </div>
+            <h5 class="text-center mb-4">सरकारी विभागों की ऑफिशियल वेबसाइट्स के लिंक्स</h5>
+            <div class="row text-center g-3">
+                <div class="col-md-2 col-6"><a href="https://ssc.gov.in" class="footer-link">SSC</a></div>
+                <div class="col-md-2 col-6"><a href="https://rrbcdg.gov.in" class="footer-link">RRB</a></div>
+                <div class="col-md-2 col-6"><a href="https://uppbpb.gov.in" class="footer-link">UP Police</a></div>
+                <div class="col-md-2 col-6"><a href="https://delhipolice.gov.in" class="footer-link">Delhi Police</a></div>
+                <div class="col-md-2 col-6"><a href="https://biharpolice.bihar.gov.in" class="footer-link">Bihar Police</a></div>
+                <div class="col-md-2 col-6"><a href="https://mha.gov.in" class="footer-link">MHA</a></div>
+                <div class="col-md-2 col-6"><a href="https://dopt.gov.in" class="footer-link">DoPT</a></div>
+                <div class="col-md-2 col-6"><a href="https://upsc.gov.in" class="footer-link">UPSC</a></div>
+                <div class="col-md-2 col-6"><a href="https://hssc.gov.in" class="footer-link">HSSC</a></div>
+                <div class="col-md-2 col-6"><a href="https://bpsc.bih.nic.in" class="footer-link">BPSC</a></div>
+                <div class="col-md-2 col-6"><a href="https://dsssb.delhi.gov.in" class="footer-link">DSSSB</a></div>
+                <div class="col-md-2 col-6"><a href="https://upsssc.gov.in" class="footer-link">UPSSSC</a></div>
+                <div class="col-md-2 col-6"><a href="https://cgpsc.gov.in" class="footer-link">CGPSC</a></div>
+                <div class="col-md-2 col-6"><a href="https://ukpsc.gov.in" class="footer-link">UKPSC</a></div>
+                <div class="col-md-2 col-6"><a href="https://mppsc.mp.gov.in" class="footer-link">MPPSC</a></div>
+                <div class="col-md-2 col-6"><a href="https://rpsc.rajasthan.gov.in" class="footer-link">RPSC</a></div>
+                <div class="col-md-2 col-6"><a href="https://jkpsc.nic.in" class="footer-link">JKPSC</a></div>
+                <div class="col-md-2 col-6"><a href="https://jpsc.gov.in" class="footer-link">JPSC</a></div>
+                <div class="col-md-2 col-6"><a href="https://tspsc.gov.in" class="footer-link">TSPSC</a></div>
+                <div class="col-md-2 col-6"><a href="https://appsc.ap.gov.in" class="footer-link">APPSC</a></div>
+                <div class="col-md-2 col-6"><a href="https://kpsc.kar.nic.in" class="footer-link">KPSC</a></div>
+                <div class="col-md-2 col-6"><a href="https://kerala psc.gov.in" class="footer-link">Kerala PSC</a></div>
+                <div class="col-md-2 col-6"><a href="https://tnpsc.gov.in" class="footer-link">TNPSC</a></div>
+                <div class="col-md-2 col-6"><a href="https://gpsc.gujarat.gov.in" class="footer-link">GPSC</a></div>
+                <div class="col-md-2 col-6"><a href="https://ops c.gov.in" class="footer-link">OPSC</a></div>
+                <div class="col-md-2 col-6"><a href="https://wbpsc.gov.in" class="footer-link">WBPSC</a></div>
+                <div class="col-md-2 col-6"><a href="https://psc.cg.gov.in" class="footer-link">CGPSC</a></div>
+                <div class="col-md-2 col-6"><a href="https://hppsc.hp.gov.in" class="footer-link">HPPSC</a></div>
+                <div class="col-md-2 col-6"><a href="https://jkssb.nic.in" class="footer-link">JKSSB</a></div>
+                <div class="col-md-2 col-6"><a href="https://jkppsc.nic.in" class="footer-link">JKPPSC</a></div>
+                <div class="col-md-2 col-6"><a href="https://ssbjk.in" class="footer-link">SSBJK</a></div>
+                <div class="col-md-2 col-6"><a href="https://psc.ap.gov.in" class="footer-link">APPSC</a></div>
+                <div class="col-md-2 col-6"><a href="https://tspsc.gov.in" class="footer-link">TSPSC</a></div>
             </div>
             <hr class="bg-white">
-            <p class="text-center mb-0">© 2026 Naveen Rank Mitra - All Rights Reserved | Made with ❤️ in Ghaziabad, UP</p>
+            <p class="text-center mb-0">© 2026 Naveen Rank Exam India - All Rights Reserved | Made with ❤️ in Ghaziabad, UP</p>
         </div>
     </footer>
+</div>
 
 <script>
     // Dark mode toggle
@@ -307,44 +295,34 @@
     });
 
     function calculateAndSave() {
-        document.getElementById('loading').style.display = 'block';
-        setTimeout(() => {
-            const correct = parseInt(document.getElementById('correct').value) || 0;
-            const wrong = parseInt(document.getElementById('wrong').value) || 0;
+        const correct = parseInt(document.getElementById('correct').value) || 0;
+        const wrong = parseInt(document.getElementById('wrong').value) || 0;
 
-            if (correct === 0 && wrong === 0) {
-                alert("कम से कम एक सही या गलत डालो!");
-                document.getElementById('loading').style.display = 'none';
-                return;
-            }
+        const scheme = document.getElementById('examScheme').value.split(',');
+        const positive = parseFloat(scheme[0]);
+        const negative = parseFloat(scheme[1]);
+        const totalQ = parseInt(scheme[2]);
+        const unattempted = totalQ - correct - wrong;
 
-            const scheme = document.getElementById('examScheme').value.split(',');
-            const positive = parseFloat(scheme[0]);
-            const negative = parseFloat(scheme[1]);
-            const totalQ = parseInt(scheme[2]);
-            const unattempted = totalQ - correct - wrong;
+        let marks = (correct * positive) - (wrong * negative);
+        marks = Math.round(marks * 100) / 100;
 
-            let marks = (correct * positive) - (wrong * negative);
-            marks = Math.round(marks * 100) / 100;
+        document.getElementById('marks').innerHTML = marks.toFixed(2);
+        document.getElementById('details').innerHTML = `
+            <strong>सही:</strong> ${correct} × ${positive} = ${(correct * positive).toFixed(2)}<br>
+            <strong>गलत:</strong> ${wrong} × ${negative} = ${(wrong * negative).toFixed(2)}<br>
+            <strong>अनअटेम्प्टेड:</strong> ${unattempted}<br>
+            <strong>Category:</strong> ${document.getElementById('category').value}
+        `;
 
-            document.getElementById('marks').innerHTML = marks.toFixed(2);
-            document.getElementById('details').innerHTML = `
-                <strong>सही:</strong> ${correct} × ${positive} = ${(correct * positive).toFixed(2)}<br>
-                <strong>गलत:</strong> ${wrong} × ${negative} = ${(wrong * negative).toFixed(2)}<br>
-                <strong>अनअटेम्प्टेड:</strong> ${unattempted}<br>
-                <strong>Category:</strong> ${document.getElementById('category').value}
-            `;
+        confetti({ particleCount: 100, spread: 70 });
 
-            confetti({ particleCount: 150, spread: 80 });
-
-            document.getElementById('resultSection').style.display = 'block';
-            document.getElementById('loading').style.display = 'none';
-        }, 1200);
+        document.getElementById('resultSection').style.display = 'block';
     }
 
     function shareResult() {
         const marks = document.getElementById('marks').innerText;
-        const text = `मेरे Marks: ${marks}\nNaveen Rank Mitra से चेक करो!\nhttps://rankwiseindia.github.io/Rankwiseindia/`;
+        const text = `मेरे Marks: ${marks}\nNaveen Rank Exam India से चेक करो!\nhttps://rankwiseindia.github.io/Rankwiseindia/`;
         window.open(`https://wa.me/?text=${encodeURIComponent(text)}`);
     }
 </script>
